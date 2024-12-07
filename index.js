@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+// import ServerlessHttp from "serverless-http";
 import cors from "cors";
 import multer from 'multer';
 import path from 'path';
@@ -33,7 +34,6 @@ const storage = multer.diskStorage({
 // Init upload
 const upload = multer({
   storage: storage,
-  // limits: { fileSize: 1000000 }, 
   fileFilter: function(req, file, cb) {
     checkFileType(file, cb);
   }
@@ -52,7 +52,7 @@ function checkFileType(file, cb) {
   }
 }
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
   res.send("Welcome to my API");
 });
 
@@ -61,7 +61,6 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/deals', dealRoutes);
 
 app.use('/public/images', express.static('public/images'));
-
 
 app.post('/api/upload', (req, res) => {
   upload(req, res, async (err) => {
@@ -90,3 +89,5 @@ app.post('/api/upload', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Listening at ${BACKEND_URL}`);
 });
+
+// module.exports.handler = ServerlessHttp(app);
